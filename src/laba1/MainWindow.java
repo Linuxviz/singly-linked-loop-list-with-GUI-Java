@@ -24,8 +24,8 @@ public class MainWindow extends Window {
     private final JButton Insert;
     private final JButton Edit;
     //Список и его итератор
-    LinkedList theList;
-    LinkedListIterator theItr;
+    LinkedList<String> theList;
+    LinkedListIterator<String> theItr;
     //Флаги действий
     boolean[] flags = {false, false, false, false, false};
 
@@ -33,8 +33,8 @@ public class MainWindow extends Window {
     MainWindow(String title) {
         //Создание экземпляра структуры
         super(title);
-        theList = new LinkedList();
-        theItr = theList.prefirst();
+        theList = new LinkedList<>();
+        theItr = theList.first();
         //Настройка главного окна
         setPreferredSize(new Dimension(1150, 500));
         setLayout(new GridLayout(1, 2));
@@ -116,14 +116,13 @@ public class MainWindow extends Window {
             if (e.getSource().equals(ShowData)) {
                 String res = LinkedList.printList(theList);
                 consoleOut(res);
-                if (LinkedList.listSize(theList) > 0)
-                    consoleOut("Размер структуры: " + LinkedList.listSize(theList) + "\n");
+                int listSize = LinkedList.listSize(theList);
+                if (listSize > 0)
+                    consoleOut("Размер структуры: " + listSize + "\n");
             }
             if (e.getSource().equals(Filler)) {
-                for (int i = 0; i < 20; i++) {
-                    theItr = theList.prefirst();
-                    theList.insert(RandString.GenerateRandomString(), theItr);
-                    theItr.advance();
+                for (int i = 0; i < 5; i++) {
+                    theList.push(RandString.GenerateRandomString());
                 }
                 consoleOut("Список заполнен");
             }

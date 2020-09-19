@@ -1,17 +1,25 @@
 package laba1;
 
-class ListNode {
+import java.util.List;
+
+class ListNode<T extends Comparable<T>> implements Comparable<ListNode<T>> {
     // Элемент списка и ссылка на следующий
-    public Object element;
+    public T element;
     public ListNode next;
 
     // Конструктор элемента без ссылки
-    public ListNode(Object theElement) {
+    public ListNode(T theElement) {
         this(theElement, null);
     }
+
     // Конструктор элемента с ссылкой на следующий
-    public ListNode(Object theElement, ListNode n) {
-        element = theElement;
-        next = n;
+    public ListNode(T element, ListNode next) {
+        this.element = element;
+        this.next = next;
+    }
+
+    @Override
+    public int compareTo(ListNode<T> comparableNode) {
+       return this.element.compareTo(comparableNode.element);
     }
 }
