@@ -148,7 +148,7 @@ public class MainWindow extends Window {
             }
             if (e.getSource().equals(Filler)) {
                 for (int i = 0; i < 5; i++) {
-                    theList.push(RandString.GenerateRandomString());
+                    theItr = theList.push(RandString.GenerateRandomString());
                 }
                 consoleOut("Список заполнен");
             }

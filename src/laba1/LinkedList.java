@@ -36,22 +36,22 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
     }
 
     // Вставка элемента в конец списка
-    public ListNode push(T x) {
+    public LinkedListIterator push(T x) {
         ListNode newNode = new ListNode(x);
         if (head == null) {
             head = newNode;
             newNode.next = newNode;
             tail = newNode;
-            return newNode;
+            return new LinkedListIterator<T>(newNode);
         }
         newNode.next = head;
         tail.next = newNode;
         tail = newNode;
-        return newNode;
+        return new LinkedListIterator<T>(newNode);
     }
 
     // Вставка элемента в начало списка
-    public ListNode unshift(T x) {
+    public LinkedListIterator unshift(T x) {
         if (head == null) {
             return push(x);
         }
@@ -59,25 +59,27 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
         newNode.next = head;
         tail.next = newNode;
         head = newNode;
-        return newNode;
+        return new LinkedListIterator<T>(newNode);
     }
 
     // Вставка по индексу.
-    public void insert(T x, LinkedListIterator p) {
+    public LinkedListIterator insert(T x, LinkedListIterator p) {
         if ( p == null) {
-            return;
+            return new LinkedListIterator<T>(null);
         }
         if (!p.isValid() && head == null) {
-            ListNode newNode = push(x);
-            p.current = newNode;
-            return;
+            LinkedListIterator<T> newNode = push(x);
+            p.current = newNode.current;
+            return newNode;
         }
         if (!p.isValid() && head != null) {
-            ListNode newNode = unshift(x);
-            p.current = newNode;
-            return;
+            LinkedListIterator<T> newNode = unshift(x);
+            p.current = newNode.current;
+            return newNode;
         }
-        p.current.next = new ListNode(x, p.current.next);
+        ListNode<T> newNode = new ListNode(x, p.current.next);
+        p.current.next = newNode;
+        return new LinkedListIterator<T>(newNode);
     }
 
     // Находим элемент по ключу и возвращаем ссылку на элемент
