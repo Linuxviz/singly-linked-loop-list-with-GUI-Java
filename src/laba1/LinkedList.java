@@ -141,9 +141,9 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
 
     // Вывод в консоль
     public static <T> String printList(LinkedList theList) {
-        String result = "Структура:\n\n";
+        String result = "Список:\n\n";
         if (theList.isEmpty()) {
-            return "Пустая структура";
+            return "Пустой список";
         }
         int i = 0;
         LinkedListIterator itr = theList.first();
@@ -172,6 +172,7 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
         return size;
     }
 
+    //сортировка
     public void sort(LinkedList<T> theList) {
         ListNode<T> temp = head;
         int listSize = listSize(theList);

@@ -23,17 +23,17 @@ public class MainWindow extends Window {
     private final JButton Remove;
     private final JButton Insert;
     private final JButton Edit;
-    JButton AddInEnd;
-    JButton NextElement;
-    JButton PrintCurrentElement;
-    JButton IterInStart;
-    JButton Sort;
-    JButton Clear;
+    private final JButton AddInEnd;
+    private final JButton NextElement;
+    private final JButton PrintCurrentElement;
+    private final JButton IterInStart;
+    private final JButton Sort;
+    private final JButton Clear;
     //Список и его итератор
     LinkedList<String> theList;
     LinkedListIterator<String> theItr;
     //Флаги действий
-    boolean[] flags = {false, false, false, false, false};
+    boolean[] flags = {false, false, false, false, false, false, false};
 
 
     MainWindow(String title) {
@@ -48,7 +48,7 @@ public class MainWindow extends Window {
         RightInnerContainer = new Container();
         LeftInnerContainer = new Container();
 
-        Filler = new JButton("Заполнить список");
+        Filler = new JButton("Заполнить список / добавть элементы");
         MakeEmpty = new JButton("Очистить список");
         ShowData = new JButton("Вывести список");
         SearchKey = new JButton("Найти элемент по ключу");
@@ -136,7 +136,9 @@ public class MainWindow extends Window {
 
             if (e.getSource().equals(MakeEmpty)) {
                 theList.makeEmpty();
-                consoleOut("Структура очищена");
+                theItr.current = null;
+                theItr.head = null;
+                consoleOut("Список очищен");
             }
 
             if (e.getSource().equals(ShowData)) {
@@ -144,13 +146,12 @@ public class MainWindow extends Window {
                 consoleOut(res);
                 int listSize = LinkedList.listSize(theList);
                 if (listSize > 0)
-                    consoleOut("Размер структуры: " + listSize + "\n");
+                    consoleOut("Размер списка: " + listSize + "\n");
             }
             if (e.getSource().equals(Filler)) {
-                for (int i = 0; i < 5; i++) {
-                    theItr = theList.push(RandString.GenerateRandomString());
-                }
-                consoleOut("Список заполнен");
+                consoleOut("Введите количество элементов:");
+                Arrays.fill(flags, false);
+                flags[5] = true;
             }
 
             if (e.getSource().equals(Remove)) {
@@ -172,25 +173,45 @@ public class MainWindow extends Window {
             }
 
             if (e.getSource().equals(AddInEnd)) {
-                consoleOut("ываырваываывьа error");
+                consoleOut("Введите ключ элемента");
+                Arrays.fill(flags, false);
+                flags[6] = true;
             }
+
             if (e.getSource().equals(NextElement)) {
-                theItr.advance();
-                int res = theList.num;
-                consoleOut("Итератор перенесен на следующий элемент:" + res);
+                if (theItr.isValid()) {
+                    theItr.advance();
+                    consoleOut("Итератор перенесен на следующий элемент");
+                } else {
+                    consoleOut("Следующий элемент не найден");
+                }
             }
             if (e.getSource().equals(PrintCurrentElement)) {
                 String res = theItr.retrieve();
-                consoleOut(res);
+                if (res != null) {
+                    consoleOut("Элемент на который указывает итератор: " + res);
+                } else {
+                    consoleOut("Элемент не найден");
+                }
             }
             if (e.getSource().equals(IterInStart)) {
-                consoleOut("");
+                if (theItr.isValid()) {
+                    theItr = theList.first();
+                    if (theItr == null) {
+                        consoleOut("Список пуст");
+                    } else {
+                        consoleOut("Итератор указывает на первый элемент");
+                    }
+                } else {
+                    consoleOut("Список пуст");
+                }
             }
             if (e.getSource().equals(Sort)) {
-                consoleOut("");
+                theList.sort(theList);
+                consoleOut("Список отсортирован");
             }
             if (e.getSource().equals(Clear)) {
-                consoleOut("");
+                OutputText.setText("");
             }
         }
     }
@@ -296,6 +317,31 @@ public class MainWindow extends Window {
                     } catch (Exception err) {
                         consoleOut("Ошибка, введены неверные данные.");
                     }
+                } else if (flags[5]) {
+                    flags[5] = false;
+                    String number = TextField.getText();
+                    TextField.setText("");
+                    consoleOut(number);
+                    try {
+                        int num = Integer.parseInt(number);
+                        for (int i = 0; i < num; i++) {
+                            theItr = theList.push(RandString.GenerateRandomString());
+                        }
+                        consoleOut("Список заполнен");
+                    } catch (Exception err) {
+                        consoleOut("Неверные данные");
+                    }
+                } else if(flags[6])  {
+                    flags[6] = false;
+                    try {
+                        String key = TextField.getText();
+                        TextField.setText("");
+                        consoleOut(key);
+                        theList.push(key);
+                        consoleOut("Элемент добавлен в конец списка");
+                    } catch (Exception err) {
+                        consoleOut("Введены неверные данные");
+                    }
                 } else {
                     String inputText = TextField.getText();
                     TextField.setText("");
@@ -305,7 +351,6 @@ public class MainWindow extends Window {
             }
         }
 
-        //commandText =  TextField.getText();
         @Override
         public void keyReleased(KeyEvent e) {
         }
