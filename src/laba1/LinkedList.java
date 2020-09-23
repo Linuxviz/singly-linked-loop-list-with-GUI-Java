@@ -1,5 +1,6 @@
 package laba1;
 
+import java.io.*;
 import java.util.Iterator;
 
 public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
@@ -33,6 +34,10 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
     // Помещаем указатель на первый элемент
     public LinkedListIterator first() {
         return new LinkedListIterator(head);
+    }
+
+    public LinkedListIterator last() {
+        return new LinkedListIterator(tail);
     }
 
     // Вставка элемента в конец списка
@@ -188,7 +193,43 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
                 temp1 = temp1.next;
             }
         }
+    }
 
+    public  static <T extends Comparable<T>> void save(LinkedList<T> theList) {
+        try (FileWriter writer = new FileWriter("LinkedList.txt", false)) {
+            int i = 0;
+            for(T item: theList) {
+                String text = (String) item;
+                writer.write(i + ".  " + text);
+                writer.append('\r');
+                writer.append('\n');
+                i++;
+            }
+            writer.flush();
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    public static LinkedList<String> read() {
+        try {
+            FileReader fr = new FileReader("LinkedList.txt");
+            BufferedReader reader = new BufferedReader(fr);
+            String line = reader.readLine();
+            LinkedList<String> newList = new LinkedList<String>();
+            while (line != null) {
+                String element = line.split("\\s+")[1];
+                newList.push(element);
+                line = reader.readLine();
+            }
+            return newList;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return new LinkedList<String>();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new LinkedList<String>();
+        }
     }
 }
 
