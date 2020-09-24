@@ -29,6 +29,8 @@ public class MainWindow extends Window {
     private final JButton IterInStart;
     private final JButton Sort;
     private final JButton Clear;
+    private final JButton Save;
+    private final JButton Read;
     //Список и его итератор
     LinkedList<String> theList;
     LinkedListIterator<String> theItr;
@@ -63,6 +65,8 @@ public class MainWindow extends Window {
         IterInStart = new JButton("Перевести итератор на первый элемент");
         Sort = new JButton("Сортировать список");
         Clear = new JButton("Очистить консоль");
+        Save = new JButton("Сохранить список");
+        Read = new JButton("Загрузить список");
 
         TextField = new JTextField();
         OutputText = new JTextArea();
@@ -73,7 +77,7 @@ public class MainWindow extends Window {
         add(RightInnerContainer);
         add(LeftInnerContainer);
         LeftInnerContainer.setLayout(new BorderLayout());
-        RightInnerContainer.setLayout(new GridLayout(7, 4));
+        RightInnerContainer.setLayout(new GridLayout(8, 2));
 
         RightInnerContainer.add(Filler);
         RightInnerContainer.add(MakeEmpty);
@@ -89,6 +93,8 @@ public class MainWindow extends Window {
         RightInnerContainer.add(IterInStart);
         RightInnerContainer.add(Sort);
         RightInnerContainer.add(Clear);
+        RightInnerContainer.add(Save);
+        RightInnerContainer.add(Read);
 
         LeftInnerContainer.add(ScrollPane, BorderLayout.CENTER);
         LeftInnerContainer.add(TextField, BorderLayout.SOUTH);
@@ -110,6 +116,8 @@ public class MainWindow extends Window {
         IterInStart.addActionListener(checker);
         Sort.addActionListener(checker);
         Clear.addActionListener(checker);
+        Save.addActionListener(checker);
+        Read.addActionListener(checker);
 
         TextField.addKeyListener(key_checker);
     }
@@ -212,6 +220,17 @@ public class MainWindow extends Window {
             }
             if (e.getSource().equals(Clear)) {
                 OutputText.setText("");
+            }
+
+            if (e.getSource().equals(Save)) {
+                theList.save(theList);
+                consoleOut("Список сохранен");
+            }
+
+            if (e.getSource().equals(Read)) {
+                theList = LinkedList.read();
+                theItr = theList.last();
+                consoleOut("Список загружен");
             }
         }
     }
