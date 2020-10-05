@@ -215,7 +215,7 @@ public class MainWindow extends Window {
                 }
             }
             if (e.getSource().equals(Sort)) {
-                theList.sort(theList);
+                theList.sort();
                 consoleOut("Список отсортирован");
             }
             if (e.getSource().equals(Clear)) {

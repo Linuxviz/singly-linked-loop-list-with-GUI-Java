@@ -172,9 +172,9 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
     }
 
     // Сортировка списка
-    public void sort(LinkedList<T> theList) {
+    public void sort() {
         ListNode<T> temp = head;
-        int listSize = theList.listSize();
+        int listSize = size;
         for (int i = 0; i < listSize; i++) {
             ListNode<T> temp1 = temp;
             for (int j = 0; j < listSize - i - 1; j++) {
