@@ -5,47 +5,55 @@ import java.util.NoSuchElementException;
 
 public class LinkedListIterator<T extends Comparable<T>> implements Iterator<T> {
     ListNode<T> current;    // Текущая позиция
-    ListNode<T> head;
-    int i;
+    ListNode<T> head;   // Голова списка
+    private int index;  // Индекс текущего элемента списка
 
-    // Конструктор итератора theNode любой элемент списк.
-    LinkedListIterator(ListNode theNode) {
-       current = theNode;
-       head = theNode;
-       i = 0;
+    // Конструктор итератора theNode любой элемент списк. Также устанавливает
+    // голову списка и индекс текущего элемента
+    LinkedListIterator(ListNode current, ListNode head, int index) {
+       this.current = current;
+       this.head = head;
+       this.index = index;
+    }
+
+    // Конструктор итератора theNode любой элемент списк. Голова списка и индекс
+    // устанавлиавются автоматически
+    LinkedListIterator(ListNode current) {
+        this(current, current, 0);
     }
 
     // Проверка на ненулевой элемент
-    public boolean isValid() {
+    public boolean hasNode() {
         return current != null;
-    }
-
-   // Возврат элемента по позиции
-    public T retrieve() {
-        return isValid() ? current.element : null;
     }
 
     // Проверка наличия следующего элемента
     public boolean hasNext() {
-        return current != null && (this.current != head || i == 0);
+        return hasNode() && (this.current != head || index == 0);
     }
 
-    // Переключение на следующий элемент списка
+   // Возврат элемента по позиции
+    public T getElement() {
+        return hasNode() ? current.element : null;
+    }
+
+    // Переключение на следующий элемент списка. Используется для реализации forEach
     public T next() {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
-        T value = current.element;
-        current = current.next;
-        i++;
-        return value;
+        return advance();
     }
 
     // Перемещение итератора на следующий элемент
-    public void advance() {
-        if (isValid()) {
+    public T advance() {
+        if (hasNode()) {
+            T value = current.element;
             current = current.next;
+            index++;
+            return value;
         }
+        return null;
     }
 }
 

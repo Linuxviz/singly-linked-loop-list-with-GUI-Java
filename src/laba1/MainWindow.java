@@ -42,7 +42,7 @@ public class MainWindow extends Window {
         //Создание экземпляра структуры
         super(title);
         theList = new LinkedList<>();
-        theItr = theList.first();
+        theItr = theList.iterator();
         //Настройка главного окна
         setPreferredSize(new Dimension(1350, 500));
         setLayout(new GridLayout(1, 2));
@@ -150,9 +150,9 @@ public class MainWindow extends Window {
             }
 
             if (e.getSource().equals(ShowData)) {
-                String res = LinkedList.printList(theList);
+                String res = theList.printList();
                 consoleOut(res);
-                int listSize = LinkedList.listSize(theList);
+                int listSize = theList.listSize();
                 if (listSize > 0)
                     consoleOut("Размер списка: " + listSize + "\n");
             }
@@ -187,7 +187,7 @@ public class MainWindow extends Window {
             }
 
             if (e.getSource().equals(NextElement)) {
-                if (theItr.isValid()) {
+                if (theItr.hasNode()) {
                     theItr.advance();
                     consoleOut("Итератор перенесен на следующий элемент");
                 } else {
@@ -195,7 +195,7 @@ public class MainWindow extends Window {
                 }
             }
             if (e.getSource().equals(PrintCurrentElement)) {
-                String res = theItr.retrieve();
+                String res = theItr.getElement();
                 if (res != null) {
                     consoleOut("Элемент на который указывает итератор: " + res);
                 } else {
@@ -203,8 +203,8 @@ public class MainWindow extends Window {
                 }
             }
             if (e.getSource().equals(IterInStart)) {
-                if (theItr.isValid()) {
-                    theItr = theList.first();
+                if (theItr.hasNode()) {
+                    theItr = theList.iterator();
                     if (theItr == null) {
                         consoleOut("Список пуст");
                     } else {
@@ -223,12 +223,12 @@ public class MainWindow extends Window {
             }
 
             if (e.getSource().equals(Save)) {
-                theList.save(theList);
+                theList.save();
                 consoleOut("Список сохранен");
             }
 
             if (e.getSource().equals(Read)) {
-                theList = LinkedList.read();
+                theList = theList.read();
                 theItr = theList.last();
                 consoleOut("Список загружен");
             }
@@ -249,7 +249,7 @@ public class MainWindow extends Window {
                     String SearchKey = TextField.getText();
                     TextField.setText("");
                     consoleOut(SearchKey);
-                    if (theList.find(SearchKey).isValid()) {
+                    if (theList.find(SearchKey).hasNode()) {
                         theList.find(SearchKey);
                         consoleOut("Ключ " + SearchKey + " найден под номером " + theList.num);
                     } else {
@@ -262,10 +262,10 @@ public class MainWindow extends Window {
                     consoleOut(SearchKey);
                     try {
                         int SearchIDint = Integer.parseInt(SearchKey);
-                        if (LinkedList.listSize(theList) > SearchIDint) {
-                            theItr = theList.first();
+                        if (theList.listSize() > SearchIDint) {
+                            theItr = theList.iterator();
                             for (int i = 0; i < SearchIDint; i++) theItr.advance();
-                            consoleOut("Ключ " + theItr.retrieve() + " найден под номером " + SearchIDint);
+                            consoleOut("Ключ " + theItr.getElement() + " найден под номером " + SearchIDint);
                         } else {
                             consoleOut("Элемент не найден");
                         }
@@ -279,11 +279,11 @@ public class MainWindow extends Window {
                     consoleOut(SearchKey);
                     try {
                         int removeInt = Integer.parseInt(SearchKey);
-                        if (LinkedList.listSize(theList) > removeInt) {
-                            theItr = theList.first();
+                        if (theList.listSize() > removeInt) {
+                            theItr = theList.iterator();
                             for (int i = 0; i < removeInt; i++) theItr.advance();
-                            theList.remove(theItr.retrieve());
-                            consoleOut("Ключ " + theItr.retrieve() + " под индексом " + removeInt + " удалён");
+                            theList.remove(theItr.getElement());
+                            consoleOut("Ключ " + theItr.getElement() + " под индексом " + removeInt + " удалён");
                         } else {
                             consoleOut("Элемент не найден");
                         }
@@ -301,10 +301,10 @@ public class MainWindow extends Window {
                         subStr = inputText.split(delimiter); // Разделение строки str с помощью метода split()
 
                         int InsertInt = Integer.parseInt(subStr[0]);
-                        if (LinkedList.listSize(theList) + 1 > InsertInt) {
-                            theItr = theList.first();
+                        if (theList.listSize() + 1 > InsertInt) {
+                            theItr = theList.iterator();
                             for (int i = 0; i < InsertInt; i++) theItr.advance();
-                            theList.insert(subStr[1], theList.findPrevious(theItr.retrieve()));
+                            theList.insert(subStr[1], theList.findPrevious(theItr.getElement()));
                             consoleOut("Ключ " + subStr[1] + " добавлен под номером " + InsertInt);
                         } else {
                             consoleOut("Невозможно добавить элемент по заданной позиции");
@@ -324,11 +324,11 @@ public class MainWindow extends Window {
 
                         int InsertInt = Integer.parseInt(subStr[0]);
 
-                        if (LinkedList.listSize(theList) > InsertInt) {
-                            theItr = theList.first();
+                        if (theList.listSize() > InsertInt) {
+                            theItr = theList.iterator();
                             for (int i = 0; i < InsertInt; i++) theItr.advance();
-                            theList.insert(subStr[1], theList.findPrevious(theItr.retrieve()));
-                            theList.remove(theItr.retrieve());
+                            theList.insert(subStr[1], theList.findPrevious(theItr.getElement()));
+                            theList.remove(theItr.getElement());
                             consoleOut(InsertInt + " Элемент изменён на " + subStr[1]);
                         } else {
                             consoleOut("Элемент не найден");
